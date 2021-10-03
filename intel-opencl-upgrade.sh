@@ -17,9 +17,9 @@ fi
 
 if [[ $latestversion > $currentversion ]]; then
 	printf -- "Downloading to %s... \n" $downloadfolder;
-	wget -q $packages -P $neofolder
+	wget -q $packages -P $downloadfolder
 	printf "Installing update... \n";
-	dpkg -i $neofolder/*.deb &>/dev/null
+	dpkg -i $downloadfolder/*.deb &>/dev/null
 	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = $latestversion ]]; then
 	  printf -- "Intel OpenCL upgraded successfully from version %s to %s... \n" $currentversion $latestversion;
 	  printf -- "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL upgraded to %s... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null;
