@@ -21,13 +21,13 @@ if [[ $latestversion > $currentversion ]]; then
 	printf "Installing update... \n"
 	dpkg -i $downloadfolder/*.deb &>/dev/null
 	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = $latestversion ]]; then
-	  printf "Intel OpenCL upgraded successfully from version %s to %s... \n" $currentversion $latestversion
-	  printf "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL upgraded to %s... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
+	  printf "Intel OpenCL updated successfully from version %s to %s... \n" $currentversion $latestversion
+	  printf "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL updated to %s... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
 	  printf "Cleaning up %s... \n" $downloadfolder
 	  rm -f $downloadfolder/*.deb
 	else
 	  printf "Installation of Intel OpenCL %s failed... \nTerminated... \n" $latestversion
-	  printf "%(%Y-%m-%d %H:%M:%S)T [ERROR] Intel OpenCL %s upgrade failed... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
+	  printf "%(%Y-%m-%d %H:%M:%S)T [ERROR] Intel OpenCL %s update failed... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
 	fi
 else
 	printf "Intel OpenCL %s is already installed... \nTerminated... \n" $latestversion
