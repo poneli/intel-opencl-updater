@@ -16,11 +16,11 @@ if [[ $EUID -gt 0 ]]; then
 fi
 
 if [[ $latestversion > $currentversion ]]; then
-	printf "Downloading to %s... \n" $downloadfolder
+	printf "Downloading to %s... \n" "$downloadfolder"
 	wget -q $packages -P $downloadfolder
 	printf "Installing update... \n"
 	dpkg -i $downloadfolder/*.deb &>/dev/null
-	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = "$latestversion" ]]; then
+	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = $latestversion ]]; then
 	  printf "Intel OpenCL updated successfully from version %s to %s... \n" "$currentversion" "$latestversion"
 	  printf -- "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL updated to %s... \n" "$(date +%s)" "$latestversion" | tee -a $downloadfolder/update.log >/dev/null
 	  printf "Cleaning up %s... \n" "$downloadfolder"
