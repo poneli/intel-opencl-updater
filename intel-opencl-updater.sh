@@ -10,7 +10,7 @@ currentversion=$(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }')
 packages=$(curl -s -L https://github.com/intel/compute-runtime/releases | grep -m2 -A 10 "snippet-clipboard-content position-relative" | awk '/wget/ {print $NF}' | awk '!x[$0]++')
 downloadfolder="/change/me/example/directory" # No trailing slash
 #### </VARIABLES>
-if [[ $EUID > 0 ]]; then
+if [[ $EUID -gt 0 ]]; then
 	printf "Run with sudo... \n"
 	exit
 fi
@@ -20,16 +20,16 @@ if [[ $latestversion > $currentversion ]]; then
 	wget -q $packages -P $downloadfolder
 	printf "Installing update... \n"
 	dpkg -i $downloadfolder/*.deb &>/dev/null
-	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = $latestversion ]]; then
-	  printf "Intel OpenCL updated successfully from version %s to %s... \n" $currentversion $latestversion
-	  printf "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL updated to %s... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
-	  printf "Cleaning up %s... \n" $downloadfolder
+	if [[ $(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }') = "$latestversion" ]]; then
+	  printf "Intel OpenCL updated successfully from version %s to %s... \n" "$currentversion" "$latestversion"
+	  printf -- "%(%Y-%m-%d %H:%M:%S)T [SUCCESS] Intel OpenCL updated to %s... \n" "$(date +%s)" "$latestversion" | tee -a $downloadfolder/update.log >/dev/null
+	  printf "Cleaning up %s... \n" "$downloadfolder"
 	  rm -f $downloadfolder/*.deb
 	else
-	  printf "Installation of Intel OpenCL %s failed... \nTerminated... \n" $latestversion
-	  printf "%(%Y-%m-%d %H:%M:%S)T [ERROR] Intel OpenCL %s update failed... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
+	  printf "Installation of Intel OpenCL %s failed... \nTerminated... \n" "$latestversion"
+	  printf -- "%(%Y-%m-%d %H:%M:%S)T [ERROR] Intel OpenCL %s update failed... \n" "$(date +%s)" "$latestversion" | tee -a $downloadfolder/update.log >/dev/null
 	fi
 else
-	printf "Intel OpenCL %s is already installed... \nTerminated... \n" $latestversion
-	printf "%(%Y-%m-%d %H:%M:%S)T [INFO] Intel OpenCL %s is already installed... \n" $(date +%s) $latestversion | tee -a $downloadfolder/update.log >/dev/null
+	printf "Intel OpenCL %s is already installed... \nTerminated... \n" "$latestversion"
+	printf -- "%(%Y-%m-%d %H:%M:%S)T [INFO] Intel OpenCL %s is already installed... \n" "$(date +%s)" "$latestversion" | tee -a $downloadfolder/update.log >/dev/null
 fi
