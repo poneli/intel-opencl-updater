@@ -6,7 +6,7 @@
 #### =====================================================================
 #### <VARIABLES>
 latestversion=$(curl -s -L https://github.com/intel/compute-runtime/releases | grep '<h1 data-view-component="true" class="d-inline mr-3">' | head -1 | cut -d '/' -f 6 | cut -d '"' -f 1)
-currentversion=$(dpkg -s intel-opencl | awk '/^Version:/ { print $NF }')
+currentversion=$(dpkg -s intel-opencl-icd | awk '/^Version:/ { print $NF }')
 packages=$(curl -s -L https://github.com/intel/compute-runtime/releases/tag/$latestversion | grep -m2 -A 10 "snippet-clipboard-content position-relative" | awk '/wget/ {print $NF}' | awk '!x[$0]++')
 downloadfolder="/change/me/example/directory" # No trailing slash
 #### </VARIABLES>
